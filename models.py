@@ -9,9 +9,9 @@ class Spell:
     range_min: int
     range_max: int
     requires_los: bool
-    effect_type: str  # 'damage', 'heal', 'pushback'
+    effect_type: str
     effect_value: int
-    area_of_effect: str  # 'single_target', 'line', 'small_cross'
+    area_of_effect: str
 
     def can_cast(self, caster: "Character", target_pos: Tuple[int, int]) -> bool:
         if caster.ap < self.ap_cost:
@@ -29,9 +29,9 @@ class Character:
         self.position = position
         self.max_hp = 100
         self.current_hp = self.max_hp
-        self.max_movement_points = 3  # Fixed MP
+        self.max_movement_points = 3
         self.movement_points = self.max_movement_points
-        self.max_action_points = 5    # Fixed PA
+        self.max_action_points = 5
         self.action_points = self.max_action_points
         self.spells: Dict[str, dict] = {}
 
@@ -116,53 +116,55 @@ class Player(Character):
         self.max_hp = 120
         self.current_hp = self.max_hp
         self.spells = {
-            'Fireball': {
-                'damage': 20,
-                'range': 4,
-                'ap_cost': 3,
-                'requires_target': True,
-                'color': (255, 100, 0)  # Orange for fire
+            "Fireball": {
+                "damage": 20,
+                "range": 4,
+                "ap_cost": 3,
+                "requires_target": True,
+                "color": (255, 100, 0),
             },
-            'Ice Bolt': {
-                'damage': 15,
-                'range': 3,
-                'ap_cost': 2,
-                'requires_target': True,
-                'color': (0, 200, 255)  # Light blue for ice
-            }
+            "Ice Bolt": {
+                "damage": 15,
+                "range": 3,
+                "ap_cost": 2,
+                "requires_target": True,
+                "color": (0, 200, 255),
+            },
         }
 
 
 class Monster(Character):
-    def __init__(self, name: str, position: Tuple[int, int], monster_type: str = "normal"):
+    def __init__(
+        self, name: str, position: Tuple[int, int], monster_type: str = "normal"
+    ):
         super().__init__(name, "enemy", position)
         if monster_type == "boss":
-            self.max_hp = 200  # Increased from 150
+            self.max_hp = 200
             self.spells = {
-                'Dark Strike': {
-                    'damage': 35,  # Increased from 25
-                    'range': 3,    # Increased range
-                    'ap_cost': 3,
-                    'requires_target': True,
-                    'color': (128, 0, 128)  # Purple for dark magic
+                "Dark Strike": {
+                    "damage": 35,
+                    "range": 3,
+                    "ap_cost": 3,
+                    "requires_target": True,
+                    "color": (128, 0, 128),
                 },
-                'Shadow Bolt': {   # Added second spell for boss
-                    'damage': 20,
-                    'range': 4,
-                    'ap_cost': 2,
-                    'requires_target': True,
-                    'color': (75, 0, 130)  # Indigo for shadow magic
-                }
+                "Shadow Bolt": {
+                    "damage": 20,
+                    "range": 4,
+                    "ap_cost": 2,
+                    "requires_target": True,
+                    "color": (75, 0, 130),
+                },
             }
         else:
-            self.max_hp = 100  # Increased from 80
+            self.max_hp = 100
             self.spells = {
-                'Bite': {
-                    'damage': 25,  # Increased from 15
-                    'range': 1,
-                    'ap_cost': 2,
-                    'requires_target': True,
-                    'color': (255, 0, 0)  # Red for physical attack
+                "Bite": {
+                    "damage": 25,
+                    "range": 1,
+                    "ap_cost": 2,
+                    "requires_target": True,
+                    "color": (255, 0, 0),
                 }
             }
         self.current_hp = self.max_hp
