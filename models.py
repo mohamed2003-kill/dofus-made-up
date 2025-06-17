@@ -1,5 +1,16 @@
-from typing import List, Tuple, Optional, Dict
+from typing import Dict, List, Tuple, Optional
 from dataclasses import dataclass
+import pygame
+
+
+@dataclass
+class Effect:
+    name: str
+    type: str  # 'buff' or 'debuff'
+    stat: str  # 'ap', 'mp', 'damage', etc.
+    value: int
+    duration: int
+    source: str  # name of the character who applied the effect
 
 
 @dataclass
@@ -35,36 +46,86 @@ class Character:
         self.action_points = self.max_action_points
         self.spells: Dict[str, dict] = {}
 
+        # New attributes
+        self.sprite_sheet_path: Optional[str] = None
+        self.sprite_size: Tuple[int, int] = (32, 32)
+        self.current_sprites: Dict[str, List[pygame.Surface]] = {}
+        self.current_animation: str = "idle"
+        self.animation_frame = 0
+        self.effects: List[Effect] = []
+
     @property
     def is_alive(self) -> bool:
-        return self.hp > 0
+        return self.current_hp > 0
 
-    def take_damage(self, amount: int) -> None:
-        self.hp = max(0, self.hp - amount)
+    def take_damage(self, amount: int) -> int:
+        # Calculate actual damage after effects
+        for effect in self.effects:
+            if effect.type == "buff" and effect.stat == "defense":
+                amount = max(0, amount - effect.value)
 
-    def heal(self, amount: int) -> None:
-        self.hp = min(self.max_hp, self.hp + amount)
+        self.current_hp = max(0, self.current_hp - amount)
+        return amount
+
+    def heal(self, amount: int) -> int:
+        # Calculate actual healing after effects
+        for effect in self.effects:
+            if effect.type == "buff" and effect.stat == "healing":
+                amount = amount + effect.value
+
+        old_hp = self.current_hp
+        self.current_hp = min(self.max_hp, self.current_hp + amount)
+        return self.current_hp - old_hp
+
+    def add_effect(self, effect: Effect):
+        self.effects.append(effect)
+
+    def remove_effect(self, effect: Effect):
+        self.effects.remove(effect)
+
+    def update_effects(self):
+        # Update effect durations and remove expired effects
+        self.effects = [effect for effect in self.effects if effect.duration > 0]
+        for effect in self.effects:
+            effect.duration -= 1
+
+    def get_stat_with_effects(self, stat: str) -> int:
+        base_value = getattr(self, f"max_{stat}", 0)
+        for effect in self.effects:
+            if effect.stat == stat:
+                if effect.type == "buff":
+                    base_value += effect.value
+                else:  # debuff
+                    base_value = max(0, base_value - effect.value)
+        return base_value
 
     def start_turn(self) -> None:
-        self.ap = self.max_ap
-        self.mp = self.max_mp
+        self.update_effects()
+        self.action_points = self.get_stat_with_effects("action_points")
+        self.movement_points = self.get_stat_with_effects("movement_points")
 
-    def can_move_to(self, new_pos: Tuple[int, int], board: "GameBoard") -> bool:
-        if not board.is_valid_position(new_pos):
-            return False
-        if board.is_occupied(new_pos):
-            return False
-        distance = abs(self.position[0] - new_pos[0]) + abs(
-            self.position[1] - new_pos[1]
-        )
-        return distance <= self.mp
+    def load_sprites(self, animation_frames: Dict[str, List[int]]):
+        if not self.sprite_sheet_path:
+            return
 
-    def move_to(self, new_pos: Tuple[int, int]) -> None:
-        distance = abs(self.position[0] - new_pos[0]) + abs(
-            self.position[1] - new_pos[1]
-        )
-        self.mp -= distance
-        self.position = new_pos
+        try:
+            sheet = pygame.image.load(self.sprite_sheet_path).convert_alpha()
+            for anim_name, frames in animation_frames.items():
+                self.current_sprites[anim_name] = []
+                for frame in frames:
+                    x = (frame * self.sprite_size[0]) % sheet.get_width()
+                    y = ((frame * self.sprite_size[0]) // sheet.get_width()) * self.sprite_size[1]
+                    sprite = sheet.subsurface((x, y, self.sprite_size[0], self.sprite_size[1]))
+                    self.current_sprites[anim_name].append(sprite)
+        except Exception as e:
+            print(f"Error loading sprites for {self.name}: {e}")
+
+    def get_current_sprite(self) -> Optional[pygame.Surface]:
+        if self.current_animation in self.current_sprites:
+            sprites = self.current_sprites[self.current_animation]
+            if sprites:
+                return sprites[self.animation_frame % len(sprites)]
+        return None
 
 
 class Warrior(Character):

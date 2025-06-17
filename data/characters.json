@@ -1,0 +1,85 @@
+{
+    "player": {
+        "name": "Hero",
+        "max_hp": 120,
+        "max_movement_points": 3,
+        "max_action_points": 5,
+        "sprite_sheet": "assets/sprites/hero.png",
+        "sprite_size": [
+            32,
+            32
+        ],
+        "animation_frames": {
+            "idle": [
+                0
+            ],
+            "walk": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "attack": [
+                5,
+                6,
+                7
+            ]
+        }
+    },
+    "monsters": {
+        "boss": {
+            "name": "Boss Monster",
+            "max_hp": 200,
+            "max_movement_points": 3,
+            "max_action_points": 5,
+            "sprite_sheet": "assets/sprites/boss.png",
+            "sprite_size": [
+                32,
+                32
+            ],
+            "animation_frames": {
+                "idle": [
+                    0
+                ],
+                "walk": [
+                    1,
+                    2,
+                    3,
+                    4
+                ],
+                "attack": [
+                    5,
+                    6,
+                    7
+                ]
+            }
+        },
+        "normal": {
+            "name": "Monster",
+            "max_hp": 100,
+            "max_movement_points": 3,
+            "max_action_points": 5,
+            "sprite_sheet": "assets/sprites/monster.png",
+            "sprite_size": [
+                32,
+                32
+            ],
+            "animation_frames": {
+                "idle": [
+                    0
+                ],
+                "walk": [
+                    1,
+                    2,
+                    3,
+                    4
+                ],
+                "attack": [
+                    5,
+                    6,
+                    7
+                ]
+            }
+        }
+    }
+}

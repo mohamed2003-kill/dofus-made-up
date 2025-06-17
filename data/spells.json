@@ -1,0 +1,129 @@
+{
+    "player_spells": {
+        "Fireball": {
+            "name": "Fireball",
+            "damage": "20-25",
+            "range": 4,
+            "ap_cost": 3,
+            "requires_target": true,
+            "requires_los": true,
+            "effect_type": "damage",
+            "color": [
+                255,
+                100,
+                0
+            ],
+            "description": "Launches a powerful fireball that deals fire damage to a single target.",
+            "sound_effect": "fireball.wav",
+            "area_of_effect": "single"
+        },
+        "Ice Bolt": {
+            "name": "Ice Bolt",
+            "damage": "15-20",
+            "range": 3,
+            "ap_cost": 2,
+            "requires_target": true,
+            "requires_los": true,
+            "effect_type": "damage",
+            "color": [
+                0,
+                200,
+                255
+            ],
+            "description": "Fires a bolt of ice that slows the target.",
+            "sound_effect": "ice.wav",
+            "area_of_effect": "single"
+        },
+        "Healing Wave": {
+            "name": "Healing Wave",
+            "healing": "15-20",
+            "range": 2,
+            "ap_cost": 3,
+            "requires_target": true,
+            "requires_los": false,
+            "effect_type": "heal",
+            "color": [
+                0,
+                255,
+                0
+            ],
+            "description": "Heals a friendly target.",
+            "sound_effect": "heal.wav",
+            "area_of_effect": "single"
+        },
+        "Push Back": {
+            "name": "Push Back",
+            "push_strength": 2,
+            "range": 1,
+            "ap_cost": 2,
+            "requires_target": true,
+            "requires_los": true,
+            "effect_type": "push",
+            "color": [
+                150,
+                150,
+                255
+            ],
+            "description": "Pushes the target away by 2 cells.",
+            "sound_effect": "push.wav",
+            "area_of_effect": "single"
+        }
+    },
+    "monster_spells": {
+        "boss": {
+            "Dark Strike": {
+                "name": "Dark Strike",
+                "damage": "30-40",
+                "range": 3,
+                "ap_cost": 3,
+                "requires_target": true,
+                "requires_los": true,
+                "effect_type": "damage",
+                "color": [
+                    128,
+                    0,
+                    128
+                ],
+                "description": "A powerful dark energy strike.",
+                "sound_effect": "dark_strike.wav",
+                "area_of_effect": "single"
+            },
+            "Shadow Bolt": {
+                "name": "Shadow Bolt",
+                "damage": "15-25",
+                "range": 4,
+                "ap_cost": 2,
+                "requires_target": true,
+                "requires_los": true,
+                "effect_type": "damage",
+                "color": [
+                    75,
+                    0,
+                    130
+                ],
+                "description": "Long-range shadow projectile.",
+                "sound_effect": "shadow.wav",
+                "area_of_effect": "single"
+            }
+        },
+        "normal": {
+            "Bite": {
+                "name": "Bite",
+                "damage": "20-30",
+                "range": 1,
+                "ap_cost": 2,
+                "requires_target": true,
+                "requires_los": true,
+                "effect_type": "damage",
+                "color": [
+                    255,
+                    0,
+                    0
+                ],
+                "description": "A vicious bite attack.",
+                "sound_effect": "bite.wav",
+                "area_of_effect": "single"
+            }
+        }
+    }
+}
